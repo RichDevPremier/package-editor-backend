@@ -43,4 +43,12 @@ export class ProductsController {
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.remove(id);
   }
+
+  @Post(':id/config')
+  saveConfiguration(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() configuration: any,
+  ) {
+    return this.productsService.saveConfiguration(id, configuration);
+  }
 }
