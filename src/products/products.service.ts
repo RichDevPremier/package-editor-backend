@@ -55,6 +55,13 @@ export class ProductsService {
     }
   }
 
+  async bulkRemove(ids: string[]): Promise<void> {
+    const result = await this.productRepository.delete(ids);
+    if (result.affected === 0) {
+      throw new NotFoundException(`No products found with the provided IDs`);
+    }
+  }
+
   async saveConfiguration(id: string, configuration: any): Promise<Product> {
     const product = await this.findOne(id);
 

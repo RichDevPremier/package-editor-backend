@@ -11,6 +11,8 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { Public } from '../auth/decorators/public.decorator';
+import { BulkDeleteDto } from './dto/bulk-delete.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -31,6 +33,12 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
 
+  @Public()
+  @Get(':id/public')
+  findOnePublic(@Param('id', ParseUUIDPipe) id: string) {
+    return this.productsService.findOne(id);
+  }
+
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -42,6 +50,11 @@ export class ProductsController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.remove(id);
+  }
+
+  @Delete()
+  bulkRemove(@Body() bulkDeleteDto: BulkDeleteDto) {
+    return this.productsService.bulkRemove(bulkDeleteDto.ids);
   }
 
   @Post(':id/config')

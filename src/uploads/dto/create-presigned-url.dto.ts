@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty } from 'class-validator';
 
-export class CreateUploadUrlDto {
+export class CreatePresignedUrlDto {
   @IsString()
   @IsNotEmpty()
   filename: string;

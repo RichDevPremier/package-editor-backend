@@ -1,13 +1,15 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { UploadsService } from './uploads.service';
-import { CreateUploadUrlDto } from './dto/create-upload-url.dto';
+import { CreatePresignedUrlDto } from './dto/create-presigned-url.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('uploads')
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 
   @Post('presigned-url')
-  createPreSignedUrl(@Body() createUploadUrlDto: CreateUploadUrlDto) {
-    return this.uploadsService.createPreSignedUrl(createUploadUrlDto);
+  createPreSignedUrl(@Body() createPresignedUrlDto: CreatePresignedUrlDto) {
+    return this.uploadsService.createPreSignedUrl(createPresignedUrlDto);
   }
 }

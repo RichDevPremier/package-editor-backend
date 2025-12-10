@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { randomUUID } from 'crypto';
-import { CreateUploadUrlDto } from './dto/create-upload-url.dto';
+import { CreatePresignedUrlDto } from './dto/create-presigned-url.dto';
 
 @Injectable()
 export class UploadsService {
@@ -12,7 +12,7 @@ export class UploadsService {
     @Inject('S3_CLIENT') private readonly s3Client: S3Client,
   ) {}
 
-  async createPreSignedUrl(createUploadUrlDto: CreateUploadUrlDto) {
+  async createPreSignedUrl(createUploadUrlDto: CreatePresignedUrlDto) {
     const { filename, contentType } = createUploadUrlDto;
     const uniqueFilename = `${randomUUID()}-${filename}`;
 
@@ -28,7 +28,7 @@ export class UploadsService {
 
     return {
       uploadUrl: signedUrl,
-      fileUrl: `${this.configService.getOrThrow<string>('PUBLIC_URL')}/${uniqueFilename}`,
+      fileUrl: `${this.configService.getOrThrow<string>('PUBLIC_URL')}/${this.configService.getOrThrow<string>('AWS_S3_BUCKET_NAME')}/${uniqueFilename}`,
     };
   }
 }
